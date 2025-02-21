@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tracker Assunzione Farmaco</title>
-  <!-- Collega il manifest per la PWA -->
-  <link rel="manifest" href="manifest.json">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -27,6 +25,10 @@
     th {
       background-color: #f2f2f2;
     }
+    /* Opzionale: stile per celle senza checkbox */
+    .no-checkbox {
+      background-color: #eaeaea;
+    }
   </style>
 </head>
 <body>
@@ -34,90 +36,67 @@
   <table>
     <thead>
       <tr>
-        <th>Giorno</th>
+        <th>Data</th>
         <th>Mattina</th>
         <th>Sera</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>Lunedì</td>
-        <td><input type="checkbox" id="lun-mat"></td>
-        <td><input type="checkbox" id="lun-ser"></td>
+        <td>20 febbraio</td>
+        <!-- Nessuna checkbox per la mattina -->
+        <td class="no-checkbox">-</td>
+        <td><input type="checkbox" id="20-sera"></td>
       </tr>
       <tr>
-        <td>Martedì</td>
-        <td><input type="checkbox" id="mar-mat"></td>
-        <td><input type="checkbox" id="mar-ser"></td>
+        <td>21 febbraio</td>
+        <td><input type="checkbox" id="21-mattina"></td>
+        <td><input type="checkbox" id="21-sera"></td>
       </tr>
       <tr>
-        <td>Mercoledì</td>
-        <td><input type="checkbox" id="mer-mat"></td>
-        <td><input type="checkbox" id="mer-ser"></td>
+        <td>22 febbraio</td>
+        <td><input type="checkbox" id="22-mattina"></td>
+        <td><input type="checkbox" id="22-sera"></td>
       </tr>
       <tr>
-        <td>Giovedì</td>
-        <td><input type="checkbox" id="gio-mat"></td>
-        <td><input type="checkbox" id="gio-ser"></td>
+        <td>23 febbraio</td>
+        <td><input type="checkbox" id="23-mattina"></td>
+        <td><input type="checkbox" id="23-sera"></td>
       </tr>
       <tr>
-        <td>Venerdì</td>
-        <td><input type="checkbox" id="ven-mat"></td>
-        <td><input type="checkbox" id="ven-ser"></td>
+        <td>24 febbraio</td>
+        <td><input type="checkbox" id="24-mattina"></td>
+        <td><input type="checkbox" id="24-sera"></td>
       </tr>
       <tr>
-        <td>Sabato</td>
-        <td><input type="checkbox" id="sab-mat"></td>
-        <td><input type="checkbox" id="sab-ser"></td>
+        <td>25 febbraio</td>
+        <td><input type="checkbox" id="25-mattina"></td>
+        <td><input type="checkbox" id="25-sera"></td>
       </tr>
       <tr>
-        <td>Domenica</td>
-        <td><input type="checkbox" id="dom-mat"></td>
-        <td><input type="checkbox" id="dom-ser"></td>
+        <td>26 febbraio</td>
+        <td><input type="checkbox" id="26-mattina"></td>
+        <td><input type="checkbox" id="26-sera"></td>
+      </tr>
+      <tr>
+        <td>27 febbraio</td>
+        <td><input type="checkbox" id="27-mattina"></td>
+        <!-- Nessuna checkbox per la sera -->
+        <td class="no-checkbox">-</td>
       </tr>
     </tbody>
   </table>
 
   <script>
-    // Richiedi il permesso per le notifiche
-    if (Notification.permission !== "granted") {
-      Notification.requestPermission();
-    }
-    
-    // Funzione per pianificare le notifiche
-    function scheduleNotification(targetHour, targetMinute, message) {
-      const now = new Date();
-      const target = new Date();
-      target.setHours(targetHour, targetMinute, 0, 0);
-      // Se l'orario è già passato oggi, pianifica per domani
-      if (target <= now) {
-        target.setDate(target.getDate() + 1);
-      }
-      const timeout = target.getTime() - now.getTime();
-      setTimeout(() => {
-        if (Notification.permission === "granted") {
-          new Notification(message);
-        }
-        // Dopo aver inviato la notifica, pianifica per il giorno successivo
-        scheduleNotification(targetHour, targetMinute, message);
-      }, timeout);
-    }
-    
-    // Pianifica le notifiche:
-    // - Mattina alle 9:00
-    // - Sera alle 21:00
-    scheduleNotification(9, 0, "È ora di prendere il farmaco (mattina)!");
-    scheduleNotification(21, 0, "È ora di prendere il farmaco (sera)!");
-    
-    // Funzione per salvare lo stato delle checkbox in localStorage
+    // Salvataggio dello stato delle checkbox in localStorage
     function saveState() {
       const checkboxes = document.querySelectorAll('input[type="checkbox"]');
       checkboxes.forEach(checkbox => {
         localStorage.setItem(checkbox.id, checkbox.checked);
       });
     }
-    
-    // Funzione per caricare lo stato delle checkbox da localStorage
+
+    // Caricamento dello stato delle checkbox da localStorage
     function loadState() {
       const checkboxes = document.querySelectorAll('input[type="checkbox"]');
       checkboxes.forEach(checkbox => {
@@ -127,27 +106,14 @@
         }
       });
     }
-    
-    // Aggiungi un listener a ogni checkbox per salvare lo stato al cambiamento
+
+    // Aggiunge un listener ad ogni checkbox per salvare lo stato al cambiamento
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
       checkbox.addEventListener('change', saveState);
     });
-    
+
     // Carica lo stato salvato al caricamento della pagina
     window.addEventListener('load', loadState);
-  </script>
-
-  <script>
-    // Registrazione del Service Worker per trasformare l'app in una PWA
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-      .then(function(registration) {
-        console.log('Service Worker registrato con successo:', registration);
-      })
-      .catch(function(error) {
-        console.log('Registrazione Service Worker fallita:', error);
-      });
-    }
   </script>
 </body>
 </html>
