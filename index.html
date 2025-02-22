@@ -25,9 +25,15 @@
     th {
       background-color: #f2f2f2;
     }
-    /* Opzionale: stile per celle senza checkbox */
     .no-checkbox {
       background-color: #eaeaea;
+    }
+    /* Stile per l'elemento contenteditable */
+    .note {
+      min-height: 20px;
+      border: 1px solid #ccc;
+      padding: 4px;
+      outline: none;
     }
   </style>
 </head>
@@ -39,77 +45,97 @@
         <th>Data</th>
         <th>Mattina</th>
         <th>Sera</th>
+        <th>Note</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>20 febbraio</td>
-        <!-- Nessuna checkbox per la mattina -->
         <td class="no-checkbox">-</td>
         <td><input type="checkbox" id="20-sera"></td>
+        <td><div id="20-note" class="note" contenteditable="true">Inserisci annotazioni...</div></td>
       </tr>
       <tr>
         <td>21 febbraio</td>
         <td><input type="checkbox" id="21-mattina"></td>
         <td><input type="checkbox" id="21-sera"></td>
+        <td><div id="21-note" class="note" contenteditable="true">Inserisci annotazioni...</div></td>
       </tr>
       <tr>
         <td>22 febbraio</td>
         <td><input type="checkbox" id="22-mattina"></td>
         <td><input type="checkbox" id="22-sera"></td>
+        <!-- Qui potrai annotare, ad esempio, "Altro farmaco" -->
+        <td><div id="22-note" class="note" contenteditable="true">Inserisci annotazioni...</div></td>
       </tr>
       <tr>
         <td>23 febbraio</td>
         <td><input type="checkbox" id="23-mattina"></td>
         <td><input type="checkbox" id="23-sera"></td>
+        <td><div id="23-note" class="note" contenteditable="true">Inserisci annotazioni...</div></td>
       </tr>
       <tr>
         <td>24 febbraio</td>
         <td><input type="checkbox" id="24-mattina"></td>
         <td><input type="checkbox" id="24-sera"></td>
+        <td><div id="24-note" class="note" contenteditable="true">Inserisci annotazioni...</div></td>
       </tr>
       <tr>
         <td>25 febbraio</td>
         <td><input type="checkbox" id="25-mattina"></td>
         <td><input type="checkbox" id="25-sera"></td>
+        <td><div id="25-note" class="note" contenteditable="true">Inserisci annotazioni...</div></td>
       </tr>
       <tr>
         <td>26 febbraio</td>
         <td><input type="checkbox" id="26-mattina"></td>
         <td><input type="checkbox" id="26-sera"></td>
+        <td><div id="26-note" class="note" contenteditable="true">Inserisci annotazioni...</div></td>
       </tr>
       <tr>
         <td>27 febbraio</td>
         <td><input type="checkbox" id="27-mattina"></td>
-        <!-- Nessuna checkbox per la sera -->
         <td class="no-checkbox">-</td>
+        <td><div id="27-note" class="note" contenteditable="true">Inserisci annotazioni...</div></td>
       </tr>
     </tbody>
   </table>
 
   <script>
-    // Salvataggio dello stato delle checkbox in localStorage
+    // Funzione per salvare checkbox e annotazioni in localStorage
     function saveState() {
-      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-      checkboxes.forEach(checkbox => {
+      // Salva checkbox
+      document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         localStorage.setItem(checkbox.id, checkbox.checked);
+      });
+      // Salva annotazioni dai div contenteditable
+      document.querySelectorAll('.note').forEach(div => {
+        localStorage.setItem(div.id, div.innerHTML);
       });
     }
 
-    // Caricamento dello stato delle checkbox da localStorage
+    // Funzione per caricare lo stato da localStorage
     function loadState() {
-      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-      checkboxes.forEach(checkbox => {
+      // Carica checkbox
+      document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         const savedState = localStorage.getItem(checkbox.id);
         if (savedState !== null) {
           checkbox.checked = (savedState === 'true');
         }
       });
+      // Carica annotazioni
+      document.querySelectorAll('.note').forEach(div => {
+        const savedValue = localStorage.getItem(div.id);
+        if (savedValue !== null) {
+          div.innerHTML = savedValue;
+        }
+      });
     }
 
-    // Aggiunge un listener ad ogni checkbox per salvare lo stato al cambiamento
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-      checkbox.addEventListener('change', saveState);
+    // Aggiungi listener per salvare al cambiamento
+    document.querySelectorAll('input, .note').forEach(element => {
+      element.addEventListener('input', saveState);
+      element.addEventListener('blur', saveState);
     });
 
     // Carica lo stato salvato al caricamento della pagina
