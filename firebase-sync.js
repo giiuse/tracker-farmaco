@@ -1,11 +1,12 @@
-// Sostituisci i valori con quelli del tuo progetto Firebase
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "TUO_API_KEY",
-  authDomain: "TUO_PROJECT_ID.firebaseapp.com",
-  projectId: "TUO_PROJECT_ID",
-  storageBucket: "TUO_PROJECT_ID.appspot.com",
-  messagingSenderId: "TUO_SENDER_ID",
-  appId: "TUO_APP_ID"
+  apiKey: "AIzaSyC0704394oGD--ixg2jBQwXVPbIoR8V5wo",
+  authDomain: "tracker-farmaco.firebaseapp.com",
+  projectId: "tracker-farmaco",
+  storageBucket: "tracker-farmaco.firebasestorage.app",
+  messagingSenderId: "848101645508",
+  appId: "1:848101645508:web:8ff3d90bcee006aade3d91",
+  measurementId: "G-RJGFY0QW77"
 };
 
 firebase.initializeApp(firebaseConfig);
