@@ -3,39 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tracker Assunzione Farmaco</title>
+  <title>Tracker Assunzione Farmaco con Firebase</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-    h1 {
-      text-align: center;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: center;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
-    .no-checkbox {
-      background-color: #eaeaea;
-    }
-    /* Stile per l'elemento contenteditable */
-    .note {
-      min-height: 20px;
-      border: 1px solid #ccc;
-      padding: 4px;
-      outline: none;
-    }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+    th { background-color: #f2f2f2; }
+    .no-checkbox { background-color: #eaeaea; }
+    .note { min-height: 20px; border: 1px solid #ccc; padding: 4px; outline: none; }
   </style>
+  <!-- Includi Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <h1>Tracker Assunzione Farmaco</h1>
@@ -65,7 +45,6 @@
         <td>22 febbraio</td>
         <td><input type="checkbox" id="22-mattina"></td>
         <td><input type="checkbox" id="22-sera"></td>
-        <!-- Qui potrai annotare, ad esempio, "Altro farmaco" -->
         <td><div id="22-note" class="note" contenteditable="true">Inserisci annotazioni...</div></td>
       </tr>
       <tr>
@@ -100,46 +79,8 @@
       </tr>
     </tbody>
   </table>
-
-  <script>
-    // Funzione per salvare checkbox e annotazioni in localStorage
-    function saveState() {
-      // Salva checkbox
-      document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        localStorage.setItem(checkbox.id, checkbox.checked);
-      });
-      // Salva annotazioni dai div contenteditable
-      document.querySelectorAll('.note').forEach(div => {
-        localStorage.setItem(div.id, div.innerHTML);
-      });
-    }
-
-    // Funzione per caricare lo stato da localStorage
-    function loadState() {
-      // Carica checkbox
-      document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        const savedState = localStorage.getItem(checkbox.id);
-        if (savedState !== null) {
-          checkbox.checked = (savedState === 'true');
-        }
-      });
-      // Carica annotazioni
-      document.querySelectorAll('.note').forEach(div => {
-        const savedValue = localStorage.getItem(div.id);
-        if (savedValue !== null) {
-          div.innerHTML = savedValue;
-        }
-      });
-    }
-
-    // Aggiungi listener per salvare al cambiamento
-    document.querySelectorAll('input, .note').forEach(element => {
-      element.addEventListener('input', saveState);
-      element.addEventListener('blur', saveState);
-    });
-
-    // Carica lo stato salvato al caricamento della pagina
-    window.addEventListener('load', loadState);
-  </script>
+  
+  <!-- Includi il file con la logica Firebase -->
+  <script src="firebase-sync.js"></script>
 </body>
 </html>
